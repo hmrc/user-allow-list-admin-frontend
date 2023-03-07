@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.userallowlistadminfrontend.config
+package config
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import com.google.inject.AbstractModule
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+class Module extends AbstractModule {
 
+  override def configure(): Unit = {
+
+    bind(classOf[AppConfig]).asEagerSingleton()
+  }
 }
