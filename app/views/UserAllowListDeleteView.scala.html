@@ -25,19 +25,19 @@
 
 @(form: Form[_], service: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("allow-list.set.title"))) {
+@layout(pageTitle = Some(messages("allow-list.delete.title"))) {
 
-  @formHelper(action = routes.UserAllowListSetController.onSubmit(service), Symbol("autocomplete") -> "off") {
+  @formHelper(action = routes.UserAllowListDeleteController.onSubmit(service), Symbol("autocomplete") -> "off") {
 
     <fieldset class="govuk-fieldset">
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <span class="govuk-caption-l">@service</span>
-        <h1 class="govuk-heading-l">@messages("allow-list.set.heading")</h1>
+        <h1 class="govuk-heading-l">@messages("allow-list.delete.heading")</h1>
       </legend>
 
       @if(request.flash.get("user-allow-list").contains("success")) {
-        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages("allow-list.set.success"))))
+        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages("allow-list.delete.success"))))
       }
 
       @if(form.errors.nonEmpty) {
@@ -46,14 +46,14 @@
 
       @govukInput(
         Input(
-          label = Label(content = Text(messages("allow-list.set.feature.label")))
+          label = Label(content = Text(messages("allow-list.delete.feature.label")))
         ).withFormField(form("feature"))
       )
 
       @govukInput(
         Input(
-          label = Label(content = Text(messages("allow-list.set.values.label"))),
-          hint = Some(Hint(content = Text(messages("allow-list.set.values.hint"))))
+          label = Label(content = Text(messages("allow-list.delete.values.label"))),
+          hint = Some(Hint(content = Text(messages("allow-list.delete.values.hint"))))
         ).withFormField(form("values"))
       )
 

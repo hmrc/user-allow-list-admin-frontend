@@ -5,3 +5,5 @@ GET        /assets/*file            controllers.Assets.versioned(path = "/public
 
 GET        /:service/set            controllers.UserAllowListSetController.onPageLoad(service: String)
 POST       /:service/set            controllers.UserAllowListSetController.onSubmit(service: String)
+GET        /:service/delete         controllers.UserAllowListDeleteController.onPageLoad(service: String)
+POST       /:service/delete         controllers.UserAllowListDeleteController.onSubmit(service: String)

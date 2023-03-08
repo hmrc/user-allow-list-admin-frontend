@@ -10,3 +10,10 @@ allow-list.set.feature.label = Feature
 allow-list.set.values.label = Values
 allow-list.set.values.hint = Multiple values can be added at once, separated by commas
 allow-list.set.success = Successfully added values to the allow list
+
+allow-list.delete.title = Remove values from the allow list
+allow-list.delete.heading = Remove values from the allow list
+allow-list.delete.feature.label = Feature
+allow-list.delete.values.label = Values
+allow-list.delete.values.hint = Multiple values can be removed at once, separated by commas
+allow-list.delete.success = Successfully removed values from the allow list

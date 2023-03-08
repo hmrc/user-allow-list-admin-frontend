@@ -17,7 +17,7 @@
 package connectors
 
 import config.Service
-import models.{Done, SetRequest}
+import models.{DeleteRequest, Done, SetRequest}
 import play.api.Configuration
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -36,6 +36,12 @@ class UserAllowListConnector @Inject() (
   def set(service: String, feature: String, values: Set[String])(implicit hc: HeaderCarrier): Future[Done] =
     httpClient.put(url"$userAllowListService/user-allow-list/admin/$service/$feature")
       .withBody(Json.toJson(SetRequest(values)))
+      .execute
+      .map(_ => Done)
+
+  def delete(service: String, feature: String, values: Set[String])(implicit hc: HeaderCarrier): Future[Done] =
+    httpClient.delete(url"$userAllowListService/user-allow-list/admin/$service/$feature")
+      .withBody(Json.toJson(DeleteRequest(values)))
       .execute
       .map(_ => Done)
 }
