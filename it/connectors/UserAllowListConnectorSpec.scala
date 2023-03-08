@@ -164,4 +164,40 @@ class UserAllowListConnectorSpec extends AnyFreeSpec with Matchers with ScalaFut
       connector.check("service", "feature", "foobar")(hc).failed.futureValue
     }
   }
+
+  ".clear" - {
+
+    val url = "/user-allow-list/admin/service/feature/clear"
+    val hc = HeaderCarrier()
+
+    "must return successfully when the server responds with OK" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .willReturn(aResponse().withStatus(OK))
+      )
+
+      connector.clear("service", "feature")(hc).futureValue
+    }
+
+    "must fail when the server responds with anything else" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR))
+      )
+
+      connector.clear("service", "feature")(hc).failed.futureValue
+    }
+
+    "must fail when the server connection fails" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .willReturn(aResponse().withFault(Fault.RANDOM_DATA_THEN_CLOSE))
+      )
+
+      connector.clear("service", "feature")(hc).failed.futureValue
+    }
+  }
 }

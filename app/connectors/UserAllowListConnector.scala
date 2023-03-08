@@ -72,6 +72,17 @@ class UserAllowListConnector @Inject() (
           case status    => Future.failed(UnexpectedResponseException(status))
         }
       }
+
+  def clear(service: String, feature: String)(implicit hc: HeaderCarrier): Future[Done] =
+    httpClient.post(url"$userAllowListService/user-allow-list/admin/$service/$feature/clear")
+      .execute[HttpResponse]
+      .flatMap { response =>
+        if (response.status == OK) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponseException(response.status))
+        }
+      }
 }
 
 object UserAllowListConnector {
