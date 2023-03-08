@@ -42,7 +42,7 @@ class UserAllowListConnectorSpec extends AnyFreeSpec with Matchers with ScalaFut
 
   ".set" - {
 
-    val url = "/admin/service/feature"
+    val url = "/user-allow-list/admin/service/feature"
     val hc = HeaderCarrier()
     val request = SetRequest(Set("a", "b"))
 
