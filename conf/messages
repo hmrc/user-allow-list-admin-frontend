@@ -4,6 +4,16 @@ service.text = This is your new service
 site.submit = Submit
 site.success = Success
 
+allow-list.service.summary.title = Add values to the allow list
+allow-list.service.summary.heading = Add values to the allow list
+allow-list.service.summary.table.caption = Current allow lists for {0}
+allow-list.service.summary.table.feature = Feature
+allow-list.service.summary.table.count = Count
+allow-list.service.summary.action.set = Add values to an allow list
+allow-list.service.summary.action.delete = Remove values from an allow list
+allow-list.service.summary.action.check = Check if a value exists in an allow list
+allow-list.service.summary.action.clear = Clear the allow list for a feature
+
 allow-list.set.title = Add values to the allow list
 allow-list.set.heading = Add values to the allow list
 allow-list.set.feature.label = Feature

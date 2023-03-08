@@ -3,6 +3,8 @@
 ->         /hmrc-frontend           hmrcfrontend.Routes
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
 
+GET        /:service/summary        controllers.ServiceSummaryController.onPageLoad(service: String)
+
 GET        /:service/set            controllers.UserAllowListSetController.onPageLoad(service: String)
 POST       /:service/set            controllers.UserAllowListSetController.onSubmit(service: String)
 GET        /:service/delete         controllers.UserAllowListDeleteController.onPageLoad(service: String)
@@ -11,3 +13,4 @@ GET        /:service/check          controllers.UserAllowListCheckController.onP
 POST       /:service/check          controllers.UserAllowListCheckController.onSubmit(service: String)
 GET        /:service/clear          controllers.UserAllowListClearController.onPageLoad(service: String)
 POST       /:service/clear          controllers.UserAllowListClearController.onSubmit(service: String)
+
