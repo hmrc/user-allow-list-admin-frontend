@@ -16,14 +16,14 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, delete, equalToJson, put, urlMatching}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, delete, equalToJson, post, put, urlMatching}
 import com.github.tomakehurst.wiremock.http.Fault
-import models.{DeleteRequest, SetRequest}
+import models.{CheckRequest, DeleteRequest, SetRequest}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.Application
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
@@ -113,6 +113,55 @@ class UserAllowListConnectorSpec extends AnyFreeSpec with Matchers with ScalaFut
       )
 
       connector.delete("service", "feature", Set("a", "b"))(hc).failed.futureValue
+    }
+  }
+
+  ".check" - {
+
+    val url = "/user-allow-list/admin/service/feature/check"
+    val hc = HeaderCarrier()
+    val request = CheckRequest("foobar")
+
+    "must return true when the server responds with OK" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .withRequestBody(equalToJson(Json.stringify(Json.toJson(request))))
+          .willReturn(aResponse().withStatus(OK))
+      )
+
+      connector.check("service", "feature", "foobar")(hc).futureValue mustBe true
+    }
+
+    "must return false when the server responds with NOT_FOUND" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .withRequestBody(equalToJson(Json.stringify(Json.toJson(request))))
+          .willReturn(aResponse().withStatus(NOT_FOUND))
+      )
+
+      connector.check("service", "feature", "foobar")(hc).futureValue mustBe false
+    }
+
+    "must fail when the server responds with anything else" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR))
+      )
+
+      connector.check("service", "feature", "foobar")(hc).failed.futureValue
+    }
+
+    "must fail when the server connection fails" in {
+
+      server.stubFor(
+        post(urlMatching(url))
+          .willReturn(aResponse().withFault(Fault.RANDOM_DATA_THEN_CLOSE))
+      )
+
+      connector.check("service", "feature", "foobar")(hc).failed.futureValue
     }
   }
 }

@@ -17,14 +17,18 @@
 package connectors
 
 import config.Service
-import models.{DeleteRequest, Done, SetRequest}
+import connectors.UserAllowListConnector.UnexpectedResponseException
+import models.{CheckRequest, DeleteRequest, Done, SetRequest}
 import play.api.Configuration
+import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NoStackTrace
 
 @Singleton
 class UserAllowListConnector @Inject() (
@@ -36,12 +40,43 @@ class UserAllowListConnector @Inject() (
   def set(service: String, feature: String, values: Set[String])(implicit hc: HeaderCarrier): Future[Done] =
     httpClient.put(url"$userAllowListService/user-allow-list/admin/$service/$feature")
       .withBody(Json.toJson(SetRequest(values)))
-      .execute
-      .map(_ => Done)
+      .execute[HttpResponse]
+      .flatMap { response =>
+        if (response.status == OK) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponseException(response.status))
+        }
+      }
 
   def delete(service: String, feature: String, values: Set[String])(implicit hc: HeaderCarrier): Future[Done] =
     httpClient.delete(url"$userAllowListService/user-allow-list/admin/$service/$feature")
       .withBody(Json.toJson(DeleteRequest(values)))
-      .execute
-      .map(_ => Done)
+      .execute[HttpResponse]
+      .flatMap { response =>
+        if (response.status == OK) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponseException(response.status))
+        }
+      }
+
+  def check(service: String, feature: String, value: String)(implicit hc: HeaderCarrier): Future[Boolean] =
+    httpClient.post(url"$userAllowListService/user-allow-list/admin/$service/$feature/check")
+      .withBody(Json.toJson(CheckRequest(value)))
+      .execute[HttpResponse]
+      .flatMap { response =>
+        response.status match {
+          case OK        => Future.successful(true)
+          case NOT_FOUND => Future.successful(false)
+          case status    => Future.failed(UnexpectedResponseException(status))
+        }
+      }
+}
+
+object UserAllowListConnector {
+
+  final case class UnexpectedResponseException(status: Int) extends Exception with NoStackTrace {
+    override def getMessage: String = s"Unexpected status: $status"
+  }
 }

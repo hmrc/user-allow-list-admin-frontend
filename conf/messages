@@ -17,3 +17,10 @@ allow-list.delete.feature.label = Feature
 allow-list.delete.values.label = Values
 allow-list.delete.values.hint = Multiple values can be removed at once, separated by commas
 allow-list.delete.success = Successfully removed values from the allow list
+
+allow-list.check.title = Check if a value is in an allow list
+allow-list.check.heading = Check if a value is in an allow list
+allow-list.check.feature.label = Feature
+allow-list.check.value.label = Value
+allow-list.check.true = Value exists in allow list
+allow-list.check.false = Value does not exist in allow list
