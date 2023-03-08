@@ -1,0 +1,63 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        govukInput: GovukInput,
+        govukButton: GovukButton,
+        govukErrorSummary: GovukErrorSummary,
+        govukNotificationBanner: GovukNotificationBanner
+)
+
+@(form: Form[_], service: String)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some(messages("allow-list.check.title"))) {
+
+  @formHelper(action = routes.UserAllowListCheckController.onSubmit(service), Symbol("autocomplete") -> "off") {
+
+    <fieldset class="govuk-fieldset">
+
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <span class="govuk-caption-l">@service</span>
+        <h1 class="govuk-heading-l">@messages("allow-list.check.heading")</h1>
+      </legend>
+
+      @request.flash.get("user-allow-list").map { exists =>
+        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages(s"allow-list.check.$exists"))))
+      }
+
+      @if(form.errors.nonEmpty) {
+        @govukErrorSummary(ErrorSummary().withFormErrorsAsText(form))
+      }
+
+      @govukInput(
+        Input(
+          label = Label(content = Text(messages("allow-list.check.feature.label")))
+        ).withFormField(form("feature"))
+      )
+
+      @govukInput(
+        Input(
+          label = Label(content = Text(messages("allow-list.check.value.label")))
+        ).withFormField(form("value"))
+      )
+
+      @govukButton(Button(content = Text(messages("site.submit"))))
+
+    </fieldset>
+  }
+}

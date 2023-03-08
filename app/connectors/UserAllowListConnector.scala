@@ -18,7 +18,7 @@ package connectors
 
 import config.Service
 import connectors.UserAllowListConnector.UnexpectedResponseException
-import models.{DeleteRequest, Done, SetRequest}
+import models.{CheckRequest, DeleteRequest, Done, SetRequest}
 import play.api.Configuration
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.Json
@@ -61,8 +61,9 @@ class UserAllowListConnector @Inject() (
         }
       }
 
-  def check(service: String, feature: String)(implicit hc: HeaderCarrier): Future[Boolean] =
+  def check(service: String, feature: String, value: String)(implicit hc: HeaderCarrier): Future[Boolean] =
     httpClient.post(url"$userAllowListService/user-allow-list/admin/$service/$feature/check")
+      .withBody(Json.toJson(CheckRequest(value)))
       .execute[HttpResponse]
       .flatMap { response =>
         response.status match {
