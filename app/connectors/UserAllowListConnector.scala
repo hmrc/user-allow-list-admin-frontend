@@ -18,10 +18,10 @@ package connectors
 
 import config.Service
 import connectors.UserAllowListConnector.UnexpectedResponseException
-import models.{CheckRequest, DeleteRequest, Done, SetRequest}
+import models.{CheckRequest, DeleteRequest, Done, SetRequest, Summary, SummaryResponse}
 import play.api.Configuration
 import play.api.http.Status.{NOT_FOUND, OK}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
@@ -79,6 +79,17 @@ class UserAllowListConnector @Inject() (
       .flatMap { response =>
         if (response.status == OK) {
           Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponseException(response.status))
+        }
+      }
+
+  def summary(service: String)(implicit hc: HeaderCarrier): Future[Seq[Summary]] =
+    httpClient.get(url"$userAllowListService/user-allow-list/admin/$service/summary")
+      .execute[HttpResponse]
+      .flatMap { response =>
+        if (response.status == OK) {
+          Future.successful(response.json.as[SummaryResponse].summaries)
         } else {
           Future.failed(UnexpectedResponseException(response.status))
         }

@@ -1,0 +1,67 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        govukInput: GovukInput,
+        govukButton: GovukButton,
+        govukErrorSummary: GovukErrorSummary,
+        govukNotificationBanner: GovukNotificationBanner
+)
+
+@(service: String, summaries: Seq[Summary])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some(messages("allow-list.service.summary.title"))) {
+
+  <span class="govuk-caption-l">@service</span>
+  <h1 class="govuk-heading-l">@messages("allow-list.service.summary.heading")</h1>
+
+  @if(summaries.nonEmpty) {
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">@messages("allow-list.service.summary.table.caption", service)</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">@messages("allow-list.service.summary.table.feature")</th>
+          <th scope="col" class="govuk-table__header">@messages("allow-list.service.summary.table.count")</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        @summaries.map { summary =>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@summary.feature</th>
+            <td class="govuk-table__cell">@summary.count</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <ul class="govuk-list">
+    <li>
+      <a class="govuk-link" href="@routes.UserAllowListSetController.onPageLoad(service)">@messages("allow-list.service.summary.action.set")</a>
+    </li>
+    <li>
+      <a class="govuk-link" href="@routes.UserAllowListDeleteController.onPageLoad(service)">@messages("allow-list.service.summary.action.delete")</a>
+    </li>
+    <li>
+      <a class="govuk-link" href="@routes.UserAllowListClearController.onPageLoad(service)">@messages("allow-list.service.summary.action.clear")</a>
+    </li>
+    <li>
+      <a class="govuk-link" href="@routes.UserAllowListCheckController.onPageLoad(service)">@messages("allow-list.service.summary.action.check")</a>
+    </li>
+  </ul>
+}

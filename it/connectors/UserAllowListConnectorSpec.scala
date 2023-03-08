@@ -16,9 +16,9 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, delete, equalToJson, post, put, urlMatching}
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.http.Fault
-import models.{CheckRequest, DeleteRequest, SetRequest}
+import models._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -198,6 +198,49 @@ class UserAllowListConnectorSpec extends AnyFreeSpec with Matchers with ScalaFut
       )
 
       connector.clear("service", "feature")(hc).failed.futureValue
+    }
+  }
+
+  ".summary" - {
+
+    val url = "/user-allow-list/admin/service/summary"
+    val hc = HeaderCarrier()
+
+    "must return successfully when the server responds with OK" in {
+
+      val response = SummaryResponse(
+        summaries = Seq(
+          Summary("foobar", 2),
+          Summary("quux", 3)
+        )
+      )
+
+      server.stubFor(
+        get(urlMatching(url))
+          .willReturn(aResponse().withStatus(OK).withBody(Json.stringify(Json.toJson(response))))
+      )
+
+      connector.summary("service")(hc).futureValue mustEqual response.summaries
+    }
+
+    "must fail when the server responds with anything else" in {
+
+      server.stubFor(
+        get(urlMatching(url))
+          .willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR))
+      )
+
+      connector.summary("service")(hc).failed.futureValue
+    }
+
+    "must fail when the server connection fails" in {
+
+      server.stubFor(
+        get(urlMatching(url))
+          .willReturn(aResponse().withFault(Fault.RANDOM_DATA_THEN_CLOSE))
+      )
+
+      connector.summary("service")(hc).failed.futureValue
     }
   }
 }
