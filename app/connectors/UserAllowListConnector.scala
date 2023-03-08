@@ -34,7 +34,7 @@ class UserAllowListConnector @Inject() (
   private val userAllowListService: Service = configuration.get[Service]("microservice.services.user-allow-list")
 
   def set(service: String, feature: String, values: Set[String])(implicit hc: HeaderCarrier): Future[Done] =
-    httpClient.put(url"$userAllowListService/admin/$service/$feature")
+    httpClient.put(url"$userAllowListService/user-allow-list/admin/$service/$feature")
       .withBody(Json.toJson(SetRequest(values)))
       .execute
       .map(_ => Done)

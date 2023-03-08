@@ -1,2 +1,12 @@
 service.name = user-allow-list-admin-frontend
 service.text = This is your new service
+
+site.submit = Submit
+site.success = Success
+
+allow-list.set.title = Add values to the allow list
+allow-list.set.heading = Add values to the allow list
+allow-list.set.feature.label = Feature
+allow-list.set.values.label = Values
+allow-list.set.values.hint = Multiple values can be added at once, separated by commas
+allow-list.set.success = Successfully added values to the allow list
