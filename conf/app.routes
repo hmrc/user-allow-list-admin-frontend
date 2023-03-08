@@ -9,3 +9,5 @@ GET        /:service/delete         controllers.UserAllowListDeleteController.on
 POST       /:service/delete         controllers.UserAllowListDeleteController.onSubmit(service: String)
 GET        /:service/check          controllers.UserAllowListCheckController.onPageLoad(service: String)
 POST       /:service/check          controllers.UserAllowListCheckController.onSubmit(service: String)
+GET        /:service/clear          controllers.UserAllowListClearController.onPageLoad(service: String)
+POST       /:service/clear          controllers.UserAllowListClearController.onSubmit(service: String)

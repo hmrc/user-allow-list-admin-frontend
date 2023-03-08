@@ -101,7 +101,7 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
 
     "when a user is authenticated" - {
 
-      "must update the allow list and redirect back to the set allow list page when a user submits valid data" in {
+      "must update the allow list and redirect back to the delete allow list entry page when a user submits valid data" in {
         when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
         when(mockConnector.delete(any(), any(), any())(any())).thenReturn(Future.successful(Done))
         val request = FakeRequest(POST, routes.UserAllowListDeleteController.onSubmit("service").url)

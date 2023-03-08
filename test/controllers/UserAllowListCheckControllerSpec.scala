@@ -100,7 +100,7 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
 
     "when a user is authenticated" - {
 
-      "must update the allow list and redirect back to the set allow list page when a user submits valid data" in {
+      "must check the allow list and redirect back to the check allow list page when a user submits valid data" in {
         when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
         when(mockConnector.check(any(), any(), any())(any())).thenReturn(Future.successful(true))
         val request = FakeRequest(POST, routes.UserAllowListCheckController.onSubmit("service").url)

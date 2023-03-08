@@ -24,3 +24,8 @@ allow-list.check.feature.label = Feature
 allow-list.check.value.label = Value
 allow-list.check.true = Value exists in allow list
 allow-list.check.false = Value does not exist in allow list
+
+allow-list.clear.title = Clear the allow list for a feature
+allow-list.clear.heading = Clear the allow list for a feature
+allow-list.clear.feature.label = Feature
+allow-list.clear.success = Successfully removed the allow list for the feature
