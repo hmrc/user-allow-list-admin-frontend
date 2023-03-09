@@ -3,7 +3,8 @@
 ->         /hmrc-frontend           hmrcfrontend.Routes
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET        /:service/summary        controllers.ServiceSummaryController.onPageLoad(service: String)
+GET        /                        controllers.IndexController.onPageLoad()
+GET        /:service                controllers.ServiceSummaryController.onPageLoad(service: String)
 
 GET        /:service/set            controllers.UserAllowListSetController.onPageLoad(service: String)
 POST       /:service/set            controllers.UserAllowListSetController.onSubmit(service: String)

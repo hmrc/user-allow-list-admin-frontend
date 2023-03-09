@@ -4,6 +4,10 @@ service.text = This is your new service
 site.submit = Submit
 site.success = Success
 
+index.heading = Administer user allow lists
+index.title = Administer user allow lists
+index.p = Select which service you''d like to see the allow lists for
+
 allow-list.service.summary.title = Add values to the allow list
 allow-list.service.summary.heading = Add values to the allow list
 allow-list.service.summary.table.caption = Current allow lists for {0}
