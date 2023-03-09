@@ -23,10 +23,11 @@
         hmrcInternalHead: HmrcInternalHead,
         hmrcInternalHeader: HmrcInternalHeader
 )
-@(pageTitle: Option[String] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: Option[String] = None, beforeContent: Option[Html] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @govukLayout(
   pageTitle = pageTitle,
   headBlock = Some(hmrcInternalHead(nonce = CSPNonce.get)),
-  headerBlock = Some(hmrcInternalHeader(InternalHeader(serviceName = Some(messages("service.name")))))
+  headerBlock = Some(hmrcInternalHeader(InternalHeader(serviceName = Some(messages("service.name"))))),
+  beforeContentBlock = beforeContent
 )(contentBlock)

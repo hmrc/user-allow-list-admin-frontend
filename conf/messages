@@ -4,6 +4,8 @@ service.text = This is your new service
 site.submit = Submit
 site.success = Success
 
+breadcrumbs.index = Home
+
 index.heading = Administer user allow lists
 index.title = Administer user allow lists
 index.p = Select which service you''d like to see the allow lists for

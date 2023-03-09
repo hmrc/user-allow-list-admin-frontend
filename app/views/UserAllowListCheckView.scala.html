@@ -14,18 +14,25 @@
  * limitations under the License.
  *@
 
+@import views.ServiceBreadcrumbs
+
 @this(
         layout: Layout,
         formHelper: FormWithCSRF,
         govukInput: GovukInput,
         govukButton: GovukButton,
         govukErrorSummary: GovukErrorSummary,
-        govukNotificationBanner: GovukNotificationBanner
+        govukNotificationBanner: GovukNotificationBanner,
+        govukBreadcrumbs: GovukBreadcrumbs
 )
 
 @(form: Form[_], service: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("allow-list.check.title"))) {
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(Seq(ServiceBreadcrumbs.index, ServiceBreadcrumbs.service(service))))
+}
+
+@layout(pageTitle = Some(messages("allow-list.check.title")), beforeContent = Some(breadcrumbs)) {
 
   @formHelper(action = routes.UserAllowListCheckController.onSubmit(service), Symbol("autocomplete") -> "off") {
 

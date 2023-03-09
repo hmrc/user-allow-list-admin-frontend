@@ -14,18 +14,25 @@
  * limitations under the License.
  *@
 
+@import views.ServiceBreadcrumbs
+
 @this(
         layout: Layout,
         formHelper: FormWithCSRF,
         govukInput: GovukInput,
         govukButton: GovukButton,
         govukErrorSummary: GovukErrorSummary,
-        govukNotificationBanner: GovukNotificationBanner
+        govukNotificationBanner: GovukNotificationBanner,
+        govukBreadcrumbs: GovukBreadcrumbs
 )
 
 @(service: String, summaries: Seq[Summary])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("allow-list.service.summary.title"))) {
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(Seq(ServiceBreadcrumbs.index)))
+}
+
+@layout(pageTitle = Some(messages("allow-list.service.summary.title")), beforeContent = Some(breadcrumbs)) {
 
   <span class="govuk-caption-l">@service</span>
   <h1 class="govuk-heading-l">@messages("allow-list.service.summary.heading")</h1>
