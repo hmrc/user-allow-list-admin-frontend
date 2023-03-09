@@ -20,7 +20,7 @@ import connectors.UserAllowListConnector
 import forms.AllowListEntryFormProvider
 import models.{AllowListEntries, AllowListEntry}
 import play.api.data.Form
-import play.api.i18n.I18nSupport
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
 import uk.gov.hmrc.internalauth.client._
@@ -69,8 +69,15 @@ class UserAllowListCheckController @Inject()(
         entry =>
           connector.check(service, entry.feature, entry.value).map { exists =>
             Redirect(routes.UserAllowListCheckController.onPageLoad(service))
-              .flashing("user-allow-list" -> exists.toString)
+              .flashing("user-allow-list-notification" -> successMessage(entry, exists))
           }
       )
+    }
+
+  private def successMessage(entry: AllowListEntry, exists: Boolean)(implicit messages: Messages): String =
+    if (exists) {
+      messages("allow-list.check.success", entry.feature, entry.value)
+    } else {
+      messages("allow-list.check.notFound", entry.feature, entry.value)
     }
 }

@@ -14,18 +14,25 @@
  * limitations under the License.
  *@
 
+@import views.ServiceBreadcrumbs
+
 @this(
         layout: Layout,
         formHelper: FormWithCSRF,
         govukInput: GovukInput,
         govukButton: GovukButton,
         govukErrorSummary: GovukErrorSummary,
-        govukNotificationBanner: GovukNotificationBanner
+        govukNotificationBanner: GovukNotificationBanner,
+        govukBreadcrumbs: GovukBreadcrumbs
 )
 
 @(form: Form[_], service: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("allow-list.check.title"))) {
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(Seq(ServiceBreadcrumbs.index, ServiceBreadcrumbs.service(service))))
+}
+
+@layout(pageTitle = Some(messages("allow-list.check.title")), beforeContent = Some(breadcrumbs)) {
 
   @formHelper(action = routes.UserAllowListCheckController.onSubmit(service), Symbol("autocomplete") -> "off") {
 
@@ -36,8 +43,8 @@
         <h1 class="govuk-heading-l">@messages("allow-list.check.heading")</h1>
       </legend>
 
-      @request.flash.get("user-allow-list").map { exists =>
-        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages(s"allow-list.check.$exists"))))
+      @request.flash.get("user-allow-list-notification").map { message =>
+        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(message)))
       }
 
       @if(form.errors.nonEmpty) {

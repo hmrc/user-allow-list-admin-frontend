@@ -111,9 +111,25 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
           )
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        flash(result).get("user-allow-list").value mustEqual "true"
+        redirectLocation(result).value mustEqual routes.UserAllowListCheckController.onPageLoad("service").url
+        flash(result).get("user-allow-list-notification").value mustEqual messages("allow-list.check.success", "feature", "a")
         verify(mockStubBehaviour, times(1)).stubAuth(Some(permission), Retrieval.username)
         verify(mockConnector, times(1)).check(eqTo("service"), eqTo("feature"), eqTo("a"))(any())
+      }
+
+      "must flash that the value does not exist in the allow list, when it doesn't exist in the allow list" in {
+        when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
+        when(mockConnector.check(any(), any(), any())(any())).thenReturn(Future.successful(false))
+        val request = FakeRequest(POST, routes.UserAllowListCheckController.onSubmit("service").url)
+          .withSession("authToken" -> "Token some-token")
+          .withFormUrlEncodedBody(
+            "feature" -> "feature",
+            "value" -> "a"
+          )
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustEqual routes.UserAllowListCheckController.onPageLoad("service").url
+        flash(result).get("user-allow-list-notification").value mustEqual messages("allow-list.check.notFound", "feature", "a")
       }
 
       "must return bad request and display the page with form errors when the user submits invalid data" in {

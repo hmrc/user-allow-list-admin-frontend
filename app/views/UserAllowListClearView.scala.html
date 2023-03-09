@@ -14,18 +14,24 @@
  * limitations under the License.
  *@
 
+@import views.ServiceBreadcrumbs
+
 @this(
         layout: Layout,
         formHelper: FormWithCSRF,
         govukInput: GovukInput,
         govukButton: GovukButton,
         govukErrorSummary: GovukErrorSummary,
-        govukNotificationBanner: GovukNotificationBanner
+        govukBreadcrumbs: GovukBreadcrumbs
 )
 
 @(form: Form[_], service: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("allow-list.clear.title"))) {
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(Seq(ServiceBreadcrumbs.index, ServiceBreadcrumbs.service(service))))
+}
+
+@layout(pageTitle = Some(messages("allow-list.clear.title")), beforeContent = Some(breadcrumbs)) {
 
   @formHelper(action = routes.UserAllowListClearController.onSubmit(service), Symbol("autocomplete") -> "off") {
 
@@ -35,10 +41,6 @@
         <span class="govuk-caption-l">@service</span>
         <h1 class="govuk-heading-l">@messages("allow-list.clear.heading")</h1>
       </legend>
-
-      @if(request.flash.get("user-allow-list").contains("success")) {
-        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages("allow-list.clear.success"))))
-      }
 
       @if(form.errors.nonEmpty) {
         @govukErrorSummary(ErrorSummary().withFormErrorsAsText(form))

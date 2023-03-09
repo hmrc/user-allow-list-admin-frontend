@@ -1,8 +1,14 @@
-service.name = user-allow-list-admin-frontend
+service.name = Administer user allow lists
 service.text = This is your new service
 
 site.submit = Submit
 site.success = Success
+
+breadcrumbs.index = Home
+
+index.heading = Administer user allow lists
+index.title = Administer user allow lists
+index.p = Select which service you''d like to see the allow lists for
 
 allow-list.service.summary.title = Add values to the allow list
 allow-list.service.summary.heading = Add values to the allow list
@@ -19,23 +25,25 @@ allow-list.set.heading = Add values to the allow list
 allow-list.set.feature.label = Feature
 allow-list.set.values.label = Values
 allow-list.set.values.hint = Multiple values can be added at once, separated by commas
-allow-list.set.success = Successfully added values to the allow list
+allow-list.set.success.multiple = Successfully added values to the {0} allow list
+allow-list.set.success.single = Successfully added {1} to the {0} allow list
 
 allow-list.delete.title = Remove values from the allow list
 allow-list.delete.heading = Remove values from the allow list
 allow-list.delete.feature.label = Feature
 allow-list.delete.values.label = Values
 allow-list.delete.values.hint = Multiple values can be removed at once, separated by commas
-allow-list.delete.success = Successfully removed values from the allow list
+allow-list.delete.success.multiple = Successfully removed values from the {0} allow list
+allow-list.delete.success.single = Successfully removed {1} from the {0} allow list
 
 allow-list.check.title = Check if a value is in an allow list
 allow-list.check.heading = Check if a value is in an allow list
 allow-list.check.feature.label = Feature
 allow-list.check.value.label = Value
-allow-list.check.true = Value exists in allow list
-allow-list.check.false = Value does not exist in allow list
+allow-list.check.success = {1} exists in the {0} allow list
+allow-list.check.notFound = {1} does not exist in the {0} allow list
 
 allow-list.clear.title = Clear the allow list for a feature
 allow-list.clear.heading = Clear the allow list for a feature
 allow-list.clear.feature.label = Feature
-allow-list.clear.success = Successfully removed the allow list for the feature
+allow-list.clear.success = Successfully cleared the {0} allow list
