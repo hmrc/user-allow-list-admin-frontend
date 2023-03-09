@@ -19,7 +19,7 @@ package controllers
 import connectors.UserAllowListConnector
 import forms.FeatureFormProvider
 import play.api.data.Form
-import play.api.i18n.I18nSupport
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
 import uk.gov.hmrc.internalauth.client._
@@ -67,8 +67,8 @@ class UserAllowListClearController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, service))),
         feature =>
           connector.clear(service, feature).map { _ =>
-            Redirect(routes.UserAllowListClearController.onPageLoad(service))
-              .flashing("user-allow-list" -> "success")
+            Redirect(routes.ServiceSummaryController.onPageLoad(service))
+              .flashing("user-allow-list-notification" -> Messages("allow-list.clear.success", feature))
           }
       )
     }

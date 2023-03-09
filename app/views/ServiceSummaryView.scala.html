@@ -37,6 +37,10 @@
   <span class="govuk-caption-l">@service</span>
   <h1 class="govuk-heading-l">@messages("allow-list.service.summary.heading")</h1>
 
+  @request.flash.get("user-allow-list-notification").map { message =>
+    @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(message)))
+  }
+
   @if(summaries.nonEmpty) {
     <table class="govuk-table">
       <caption class="govuk-table__caption govuk-table__caption--m">@messages("allow-list.service.summary.table.caption", service)</caption>

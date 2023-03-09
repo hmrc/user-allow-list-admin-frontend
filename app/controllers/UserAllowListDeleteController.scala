@@ -20,7 +20,7 @@ import connectors.UserAllowListConnector
 import forms.AllowListEntriesFormProvider
 import models.AllowListEntries
 import play.api.data.Form
-import play.api.i18n.I18nSupport
+import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
 import uk.gov.hmrc.internalauth.client._
@@ -68,9 +68,16 @@ class UserAllowListDeleteController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, service))),
         entries =>
           connector.delete(service, entries.feature, entries.values).map { _ =>
-            Redirect(routes.UserAllowListDeleteController.onPageLoad(service))
-              .flashing("user-allow-list" -> "success")
+            Redirect(routes.ServiceSummaryController.onPageLoad(service))
+              .flashing("user-allow-list-notification" -> successMessage(entries.feature, entries.values))
           }
       )
+    }
+
+  private def successMessage(feature: String, entries: Set[String])(implicit messages: Messages): String =
+    if (entries.size == 1) {
+      messages("allow-list.delete.success.single", feature, entries.head)
+    } else {
+      messages("allow-list.delete.success.multiple", feature)
     }
 }

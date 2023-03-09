@@ -43,8 +43,8 @@
         <h1 class="govuk-heading-l">@messages("allow-list.check.heading")</h1>
       </legend>
 
-      @request.flash.get("user-allow-list").map { exists =>
-        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages(s"allow-list.check.$exists"))))
+      @request.flash.get("user-allow-list-notification").map { message =>
+        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(message)))
       }
 
       @if(form.errors.nonEmpty) {

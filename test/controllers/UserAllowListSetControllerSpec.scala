@@ -101,7 +101,7 @@ class UserAllowListSetControllerSpec extends AnyFreeSpec with Matchers with Scal
 
     "when a user is authenticated" - {
 
-      "must update the allow list and redirect back to the set allow list entry page when a user submits valid data" in {
+      "must update the allow list and redirect back to the service summary page when a user submits valid data" in {
         when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
         when(mockConnector.set(any(), any(), any())(any())).thenReturn(Future.successful(Done))
         val request = FakeRequest(POST, routes.UserAllowListSetController.onSubmit("service").url)
@@ -112,9 +112,25 @@ class UserAllowListSetControllerSpec extends AnyFreeSpec with Matchers with Scal
           )
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        flash(result).get("user-allow-list").value mustEqual "success"
+        redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
+        flash(result).get("user-allow-list-notification").value mustEqual messages("allow-list.set.success.multiple", "feature")
         verify(mockStubBehaviour, times(1)).stubAuth(Some(permission), Retrieval.username)
         verify(mockConnector, times(1)).set(eqTo("service"), eqTo("feature"), eqTo(Set("a", "b")))(any())
+      }
+
+      "must flash the value which has been set when only a single value is passed" in {
+        when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
+        when(mockConnector.set(any(), any(), any())(any())).thenReturn(Future.successful(Done))
+        val request = FakeRequest(POST, routes.UserAllowListSetController.onSubmit("service").url)
+          .withSession("authToken" -> "Token some-token")
+          .withFormUrlEncodedBody(
+            "feature" -> "feature",
+            "values" -> "a"
+          )
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
+        flash(result).get("user-allow-list-notification").value mustEqual messages("allow-list.set.success.single", "feature", "a")
       }
 
       "must return bad request and display the page with form errors when the user submits invalid data" in {

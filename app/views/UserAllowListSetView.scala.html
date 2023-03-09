@@ -22,7 +22,6 @@
         govukInput: GovukInput,
         govukButton: GovukButton,
         govukErrorSummary: GovukErrorSummary,
-        govukNotificationBanner: GovukNotificationBanner,
         govukBreadcrumbs: GovukBreadcrumbs
 )
 
@@ -42,10 +41,6 @@
         <span class="govuk-caption-l">@service</span>
         <h1 class="govuk-heading-l">@messages("allow-list.set.heading")</h1>
       </legend>
-
-      @if(request.flash.get("user-allow-list").contains("success")) {
-        @govukNotificationBanner(NotificationBanner(bannerType = Some("success"), title = Text(messages("site.success")), content = Text(messages("allow-list.set.success"))))
-      }
 
       @if(form.errors.nonEmpty) {
         @govukErrorSummary(ErrorSummary().withFormErrorsAsText(form))

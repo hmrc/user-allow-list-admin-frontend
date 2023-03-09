@@ -101,7 +101,7 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
 
     "when a user is authenticated" - {
 
-      "must update the allow list and redirect back to the clear allow list page when a user submits valid data" in {
+      "must update the allow list and redirect back to the service summary page when a user submits valid data" in {
         when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.successful("username"))
         when(mockConnector.clear(any(), any())(any())).thenReturn(Future.successful(Done))
         val request = FakeRequest(POST, routes.UserAllowListClearController.onSubmit("service").url)
@@ -111,7 +111,8 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
           )
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        flash(result).get("user-allow-list").value mustEqual "success"
+        redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
+        flash(result).get("user-allow-list-notification").value mustEqual messages("allow-list.clear.success", "feature")
         verify(mockStubBehaviour, times(1)).stubAuth(Some(permission), Retrieval.username)
         verify(mockConnector, times(1)).clear(eqTo("service"), eqTo("feature"))(any())
       }
