@@ -2,6 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
+  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     majorVersion := 0,
     scalaVersion := "2.13.8",
