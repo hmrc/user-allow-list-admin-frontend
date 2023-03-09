@@ -1,4 +1,4 @@
-service.name = user-allow-list-admin-frontend
+service.name = Administer user allow lists
 service.text = This is your new service
 
 site.submit = Submit
