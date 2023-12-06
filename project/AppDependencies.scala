@@ -15,7 +15,5 @@ object AppDependencies {
     "org.mockito"             %% "mockito-scala"              % "1.17.29"
   ).map(_ % Test)
 
-  val itDependencies = Seq(
-    "com.github.tomakehurst" % "wiremock-standalone" % "3.0.1"
-  ).map(_ % Test)
+  val itDependencies: Seq[ModuleID] = Seq.empty
 }
