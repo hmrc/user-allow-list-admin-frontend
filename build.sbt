@@ -1,12 +1,11 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
-ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
-
 lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
+    majorVersion := 0,
+    scalaVersion := "2.13.12",
     PlayKeys.playDefaultPort := 11307,
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
@@ -33,4 +32,6 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
   .settings(integrationTestSettings())
+  .settings(majorVersion := 0)
+  .settings(scalaVersion := "2.13.12")
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
