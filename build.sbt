@@ -5,7 +5,7 @@ lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.12",
     PlayKeys.playDefaultPort := 11307,
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
