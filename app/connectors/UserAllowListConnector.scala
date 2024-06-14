@@ -18,13 +18,14 @@ package connectors
 
 import config.Service
 import connectors.UserAllowListConnector.UnexpectedResponseException
-import models.{CheckRequest, DeleteRequest, Done, SetRequest, Summary, SummaryResponse}
+import models._
 import play.api.Configuration
 import play.api.http.Status.{NOT_FOUND, OK}
-import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
-import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import play.api.libs.ws.writeableOf_JsValue
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -29,7 +29,7 @@ class AllowListEntriesFormProvider @Inject() () {
     mapping(
       "feature" -> text.verifying("error.required", _.trim.nonEmpty),
       "values" -> text.verifying("error.required", _.trim.nonEmpty).transform[Set[String]](toSet, _.mkString(","))
-    )(AllowListEntries.apply)(AllowListEntries.unapply)
+    )(AllowListEntries.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
   private def toSet(value: String): Set[String] =

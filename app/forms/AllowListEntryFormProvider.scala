@@ -29,6 +29,6 @@ class AllowListEntryFormProvider @Inject() () {
     mapping(
       "feature" -> text.verifying("error.required", _.trim.nonEmpty),
       "value" -> text.verifying("error.required", _.trim.nonEmpty)
-    )(AllowListEntry.apply)(AllowListEntry.unapply)
+    )(AllowListEntry.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }
