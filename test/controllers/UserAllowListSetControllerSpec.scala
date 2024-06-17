@@ -16,24 +16,25 @@
 
 package controllers
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchersSugar.eqTo
-import org.mockito.{Mockito, MockitoSugar}
+import connectors.UserAllowListConnector
+import forms.AllowListEntriesFormProvider
+import models.Done
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{times, verify, when, never}
+import org.mockito.Mockito
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.internalauth.client.test.{FrontendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.internalauth.client.*
 import views.html.UserAllowListSetView
-import connectors.UserAllowListConnector
-import forms.AllowListEntriesFormProvider
-import models.Done
-import uk.gov.hmrc.internalauth.client.{FrontendAuthComponents, IAAction, Predicate, Resource, ResourceLocation, ResourceType, Retrieval}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future

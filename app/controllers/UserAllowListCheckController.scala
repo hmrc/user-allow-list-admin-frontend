@@ -18,12 +18,12 @@ package controllers
 
 import connectors.UserAllowListConnector
 import forms.AllowListEntryFormProvider
-import models.{AllowListEntries, AllowListEntry}
+import models.AllowListEntry
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UserAllowListCheckView
 

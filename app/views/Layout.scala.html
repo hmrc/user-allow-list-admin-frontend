@@ -23,7 +23,7 @@
         hmrcInternalHead: HmrcInternalHead,
         hmrcInternalHeader: HmrcInternalHeader
 )
-@(pageTitle: Option[String] = None, beforeContent: Option[Html] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: Option[String] = None, beforeContent: Option[Html] = None)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @govukLayout(
   pageTitle = pageTitle,

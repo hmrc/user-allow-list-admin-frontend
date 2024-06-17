@@ -1,7 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "3.3.3"
 
 lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -32,5 +32,5 @@ lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
-  .settings(DefaultBuildSettings.itSettings)
+  .settings(DefaultBuildSettings.itSettings())
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
