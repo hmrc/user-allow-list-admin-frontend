@@ -26,7 +26,6 @@ lazy val microservice = Project("user-allow-list-admin-frontend", file("."))
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
     pipelineStages := Seq(gzip),
   )
-  .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings)
 
 lazy val it = project
