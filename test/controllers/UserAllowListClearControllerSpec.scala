@@ -110,6 +110,7 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
           .withFormUrlEncodedBody(
             "feature" -> "feature"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
@@ -124,6 +125,7 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
         val request = FakeRequest(POST, routes.UserAllowListClearController.onSubmit("service").url)
           .withSession("authToken" -> "Token some-token")
           .withFormUrlEncodedBody()
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         val view = app.injector.instanceOf[UserAllowListClearView]
         status(result) mustBe BAD_REQUEST
@@ -139,12 +141,14 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
           .withFormUrlEncodedBody(
             "feature" -> "feature"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         route(app, request).value.failed.futureValue
       }
     }
 
     "must fail when the user is not authenticated" in {
-      val request = FakeRequest(POST, routes.UserAllowListClearController.onSubmit("service").url) // no auth token
+      val request = FakeRequest(POST, routes.UserAllowListClearController.onSubmit("service").url)
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded") // no auth token
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
     }
@@ -153,6 +157,7 @@ class UserAllowListClearControllerSpec extends AnyFreeSpec with Matchers with Sc
       when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.failed(new RuntimeException()))
       val request = FakeRequest(POST, routes.UserAllowListClearController.onSubmit("service").url)
         .withSession("authToken" -> "Token some-token")
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
       route(app, request).value.failed.futureValue
     }
   }

@@ -38,7 +38,8 @@ import views.html.UserAllowListCheckView
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
 
-class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterEach with OptionValues {
+class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with ScalaFutures with MockitoSugar with BeforeAndAfterEach with OptionValues
+{
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -110,6 +111,7 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
             "feature" -> "feature",
             "value" -> "a"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.UserAllowListCheckController.onPageLoad("service").url
@@ -127,6 +129,7 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
             "feature" -> "feature",
             "value" -> "a"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.UserAllowListCheckController.onPageLoad("service").url
@@ -160,7 +163,9 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
     }
 
     "must fail when the user is not authenticated" in {
-      val request = FakeRequest(POST, routes.UserAllowListCheckController.onSubmit("service").url) // no auth token
+      val request = FakeRequest(POST, routes.UserAllowListCheckController.onSubmit("service").url)
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
+      // no auth token
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
     }
@@ -169,6 +174,7 @@ class UserAllowListCheckControllerSpec extends AnyFreeSpec with Matchers with Sc
       when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.failed(new RuntimeException()))
       val request = FakeRequest(POST, routes.UserAllowListCheckController.onSubmit("service").url)
         .withSession("authToken" -> "Token some-token")
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
       route(app, request).value.failed.futureValue
     }
   }

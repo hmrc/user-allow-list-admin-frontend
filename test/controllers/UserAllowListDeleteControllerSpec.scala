@@ -111,6 +111,7 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
             "feature" -> "feature",
             "values" -> "a,b"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
@@ -128,6 +129,7 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
             "feature" -> "feature",
             "values" -> "a"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.ServiceSummaryController.onPageLoad("service").url
@@ -140,6 +142,7 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
         val request = FakeRequest(POST, routes.UserAllowListDeleteController.onSubmit("service").url)
           .withSession("authToken" -> "Token some-token")
           .withFormUrlEncodedBody()
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         val result = route(app, request).value
         val view = app.injector.instanceOf[UserAllowListDeleteView]
         status(result) mustBe BAD_REQUEST
@@ -156,12 +159,14 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
             "feature" -> "feature",
             "values" -> "a,b"
           )
+          .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
         route(app, request).value.failed.futureValue
       }
     }
 
     "must fail when the user is not authenticated" in {
-      val request = FakeRequest(POST, routes.UserAllowListDeleteController.onSubmit("service").url) // no auth token
+      val request = FakeRequest(POST, routes.UserAllowListDeleteController.onSubmit("service").url)
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")// no auth token
       val result = route(app, request).value
       status(result) mustBe SEE_OTHER
     }
@@ -170,6 +175,7 @@ class UserAllowListDeleteControllerSpec extends AnyFreeSpec with Matchers with S
       when(mockStubBehaviour.stubAuth[String](any(), any())).thenReturn(Future.failed(new RuntimeException()))
       val request = FakeRequest(POST, routes.UserAllowListDeleteController.onSubmit("service").url)
         .withSession("authToken" -> "Token some-token")
+        .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
       route(app, request).value.failed.futureValue
     }
   }
