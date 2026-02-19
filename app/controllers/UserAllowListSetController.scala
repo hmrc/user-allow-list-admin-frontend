@@ -61,8 +61,8 @@ class UserAllowListSetController @Inject() (
       Ok(view(form, service))
     }
 
-  def onSubmit(service: String): Action[AnyContent] =
-    authorised(service).async { implicit request =>
+  def onSubmit(service: String): Action[Map[String, Seq[String]]] =
+    authorised(service).async(parse.formUrlEncoded) { implicit request =>
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, service))),

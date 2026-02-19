@@ -24,7 +24,7 @@ import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.{FrontendBaseController, FrontendController}
 import views.html.UserAllowListCheckView
 
 import javax.inject.{Inject, Singleton}
@@ -37,7 +37,7 @@ class UserAllowListCheckController @Inject()(
                                              view: UserAllowListCheckView,
                                              formProvider: AllowListEntryFormProvider,
                                              connector: UserAllowListConnector
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           )(implicit ec: ExecutionContext) extends FrontendController(controllerComponents) with I18nSupport {
 
   private def form: Form[AllowListEntry] = formProvider()
 
@@ -61,8 +61,8 @@ class UserAllowListCheckController @Inject()(
       Ok(view(form, service))
     }
 
-  def onSubmit(service: String): Action[AnyContent] =
-    authorised(service).async { implicit request =>
+  def onSubmit(service: String): Action[Map[String, Seq[String]]] =
+    authorised(service).async(parse.formUrlEncoded) { implicit request =>
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, service))),
